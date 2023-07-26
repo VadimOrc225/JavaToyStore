@@ -82,11 +82,10 @@ public class Toy implements Comparable<Toy> {
             int a = PrizeOfTheGame.getQuantity();
             PrizeOfTheGame.setQuantity(a - 1);
             catalog.add(PrizeOfTheGame);
-            PrizeOfTheGame.setQuantity(1);
-        } else {
-            return PrizeOfTheGame;
+//            PrizeOfTheGame.setQuantity(1);
         }
         return PrizeOfTheGame;
+
 
     }
 
@@ -150,6 +149,6 @@ public class Toy implements Comparable<Toy> {
 
     @Override
     public int compareTo(Toy o) {
-        return this.frequency.compareTo(o.frequency);
+        return o.frequency.compareTo(this.frequency);
     }
 }
