@@ -18,7 +18,7 @@ public class ToyPresenter {
         char operator = view.getInputOperator();
         switch (operator) {
             case '1':
-                Integer id = view.getInputId();
+                String id = view.getInputId();
                 String name = view.getInputName();
                 Integer quantity = view.getInputQuantity();
                 Integer frequency = view.getInputFrequency();
@@ -55,12 +55,15 @@ public class ToyPresenter {
             case '3':
                 id = view.getInputId();
                 model.displayInfo(id);
+                break;
             case '7':
-                model.addition2(model.game());
+                Toy a = model.game();
+                model.addition2(a);
+                System.out.println(a);
 
                 break;
             case '8':
-                String fileName = "result.txt";
+                String fileName = "JavaToyStore/result.txt";
                 File file = new File(fileName);
                 FileWriter writer;
 
@@ -70,12 +73,28 @@ public class ToyPresenter {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+                Toy prize = model.removingPrise();
+
 
                 try {
-                    writer.write(String.valueOf(model.removingPrise().getId()));
+                    try {
+                        String val = prize.getId();
+                        writer.write(String.valueOf(val));
+                    } catch (NullPointerException e) {
+                        throw new RuntimeException(e);
+
+                    }
+
+
                     writer.write(" ");
-                    writer.write(String.valueOf(model.removingPrise().getName()));
-                    writer.write(" ");
+                    try {
+                        String val = prize.getName();
+                        writer.write(String.valueOf(val));
+                    } catch (NullPointerException e) {
+                        throw new RuntimeException(e);
+
+                    }
+                    writer.write("\n");
 
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);

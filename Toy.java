@@ -1,13 +1,12 @@
 package JavaToyStore;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+
 import java.util.Objects;
 import java.util.PriorityQueue;
 
 
-public class Toy implements Comparable{
-    private Integer id;
+public class Toy implements Comparable<Toy> {
+    private String id;
     private String name;
     private Integer quantity;
     private Integer frequency;
@@ -16,19 +15,20 @@ public class Toy implements Comparable{
 
     }
 
-    public Toy(Integer id, String name, Integer quantity, Integer frequency) {   //три конструктора
+    public Toy(String id, String name, Integer quantity, Integer frequency) {   //три конструктора
         this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.frequency = frequency;
     }
 
-    public Toy(Integer id, String name) {
+    public Toy(String id, String name) {
 
         this.name = name;
         this.id = id;
     }
-    public Toy(Integer id, Integer frequency) {
+
+    public Toy(String id, Integer frequency) {
 
         this.id = id;
         this.frequency = frequency;
@@ -57,7 +57,8 @@ public class Toy implements Comparable{
     public Integer getFrequency() {
         return frequency;
     }
-    public Integer getId() {
+
+    public String getId() {
         return id;
     }
 
@@ -66,25 +67,35 @@ public class Toy implements Comparable{
     }
 
 
-
     private PriorityQueue<Toy> catalog = new PriorityQueue<Toy>();
-    private LinkedList<Toy> catalog2 = new LinkedList<>();
+    private PriorityQueue<Toy> catalog2 = new PriorityQueue<Toy>();
 
-    public void addition(Toy toy) {
+    public void addition(Toy toy) {    // добавление игрушки в каталог магазина
         catalog.add(toy);
 
     }
-    public Toy game() {
 
-        return catalog.poll();
+    public Toy game() {       // метод розыгрыша
+        Toy PrizeOfTheGame = catalog.poll();
+        if (PrizeOfTheGame.getQuantity() > 1) {     // если игрушек с данным id больше одной, то должна выйти одна игрушка,
+                                                    // а остальные должны остаться!
+            int a = PrizeOfTheGame.getQuantity();
+            PrizeOfTheGame.setQuantity(a - 1);
+            catalog.add(PrizeOfTheGame);
+            PrizeOfTheGame.setQuantity(1);
+        } else {
+            return PrizeOfTheGame;
+        }
+        return PrizeOfTheGame;
 
     }
-    public void addition2(Toy toy2) {      // добавление развгранного приза во второй список
+
+    public void addition2(Toy toy2) {      // добавление разыгранного приза во второй список
         catalog2.add(toy2);
     }
 
     public Toy removingPrise() {            // метод выдачи приза
-        return catalog2.pop();
+        return catalog2.poll();
     }
 
 
@@ -92,7 +103,7 @@ public class Toy implements Comparable{
         for (Toy x : catalog) {
             if (toy2.id.equals(x.id) && toy2.name.equals(x.name)) {
                 catalog.remove(x);
-                toy2.setQuantity(x.quantity);
+                toy2.setQuantity(x.quantity);   // частоту меняем, а количество должно остаться как было
                 catalog.add(toy2);
 
             }
@@ -102,7 +113,7 @@ public class Toy implements Comparable{
 
     }
 
-    public boolean greeting(Toy toy) {
+    public boolean greeting(Toy toy) {                //проверка совпадения id и названия (name)
 
         for (Toy x : catalog) {
             if (toy.id.equals(x.id) && toy.name.equals(x.name)) {
@@ -115,21 +126,30 @@ public class Toy implements Comparable{
     }
 
 
-    public void displayInfo(Integer id) {
+    public void displayInfo(String id) {      // Информация по игрушке из каталога магазина
         for (Toy x : catalog) {
             if (Objects.equals(id, x.id)) {
                 System.out.printf("Название игрушки: %s, Количество: %s, Вероятность появления: %d\n", x.getName(),
                         x.getQuantity(), x.getFrequency());
 
             }
-            else {System.out.print("Нет такого id");}
+//            else if (catalog.isEmpty()) {
+//                System.out.print("Нет такого id");
+//            }
+            else {
+                System.out.print("Нет такого id\n");
+            }
 
         }
-
+        if (catalog.isEmpty()) {
+                System.out.print("Нет такого id \n");
+            }
     }
 
+
+
     @Override
-    public int compareTo(Object o) {
-        return 0;
+    public int compareTo(Toy o) {
+        return this.frequency.compareTo(o.frequency);
     }
 }
